@@ -1,20 +1,14 @@
-.main{
-    width: 730px;
-    margin: 0 auto;
-    overflow: hidden;
-    padding: 0px;
-}
 .new_mission{
     width: 50%;
+    text-align: center;
 }
 
 .data_search{
     width: 50%;
+    text-align: center;
 }
 .pic{
-    margin-top: 200px;
-    width: 400px;
-    height: 400px;
+    width: 80%;
 }
 
 
