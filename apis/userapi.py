@@ -32,7 +32,7 @@ def login():
 
             session.permanent = True
 
-            return redirect(url_for('index.home'))
+            return redirect(url_for('index.indexs'))
 
 
         else:

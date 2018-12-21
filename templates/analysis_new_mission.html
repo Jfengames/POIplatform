@@ -16,9 +16,20 @@
     {#  <div class="form-group col-lg-8" style="margin-top: 10px;width: 100%">#}
     {#    <label for="">&nbsp;&nbsp;&nbsp;请上传工参文件</label>#}
     {#      <a class="a-upload" herf="#">#}
-              <input type="file" name="file">
-              <input type=submit value=Upload style="float: right;margin-top: -25px;margin-right: 600px">
-    {#      </a>#}
+{#              <input type="file" name="file">#}
+{#              <input type=submit value=Upload style="float: right;margin-top: -25px;margin-right: 600px">#}
+    <div class="input-group">
+                            <input type="text" class="form-control" onkeydown="return false;" onpaste="return false;" id="file_name" placeholder="请上传工参..." style="width: 50%">
+                            <label class="input-group-btn">
+                                <span class="btn btn-primary style-blue" style="margin-right: 5px;background-color: #5688ee;color: white">
+                                    浏览 <input type="file" name="file" accept="application/vnd.sealed-xls" style="display: none;" multiple onchange="document.getElementById('file_name').value=this.files[0].name">
+                                </span>
+
+                                     <button type="submit"  class="btn btn-primary style-blue" style="margin-right: 5px;background-color: #5688ee;color: white">上传</button>
+
+                            </label>
+                        </div>
+        {#      </a>#}
     {#      </div>#}
     </form>
 </div>

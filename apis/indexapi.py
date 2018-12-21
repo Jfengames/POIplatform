@@ -1,50 +1,32 @@
-from flask import Flask,render_template,request,redirect,url_for,session,send_from_directory,flash,g,Blueprint
-from config import HOST,DB,PASSWD,PORT,USER,ADSL_SERVER_AUTH,ADSL_SERVER_URL,KEYS,TABLE_NAME_INDEX,DIRECTORY
-from database import User,Adcode,Scenecode,ScrapeMissions,db,GaodeMapScene
+from flask import render_template, request, session, Blueprint
+from database import User,Adcode,Scenecode,ScrapeMissions,db
 from decorators import login_required
-import pymysql
-from sqlalchemy import and_
-import xlwt
-import os
-
-from toolbox import remove_zero,downloadcsvindex,plotly
-
-
+from database import User,Adcode,Scenecode,ScrapeMissions,db,GaodeMapScene
+from config import KEYS
+from sqlalchemy import func
 index = Blueprint('index',__name__)
 
 
-@index.route('/',methods=['GET','POST'])
+@index.route('/',methods=['GET', 'POST'])
 @login_required
-def home():
+def indexs():
     if request.method == 'GET':
-
-        return render_template('index.html')
-    else:
-        city = request.form.get('city')
-        scene = request.form.get('scene')
-        adcode = int(Adcode.query.filter(Adcode.city == city).first().adcode)
-        _typecode = Scenecode.query.filter(Scenecode.scene == scene).one().scenecode
-        typecode = remove_zero(_typecode)
-
-        gaodemapscene = GaodeMapScene.query.filter(GaodeMapScene.city_adcode == adcode,GaodeMapScene.typecode.like(typecode+"%")).limit(1000).all()
-
-        div = plotly(adcode,typecode)
-
-
-        if gaodemapscene==[]:
-            flash('请联系管理员获取你想要的数据！')
-            return redirect(url_for('index.home'))
-        else:
-            downloadcsvindex(adcode,typecode)
-
-            return render_template('index.html',gaodemapscene=gaodemapscene, div=div)
+        crawlTotalNum = db.session.query(func.count(GaodeMapScene.id)).scalar()
+        _crawlTotalRes = db.session.query(func.count(GaodeMapScene.id)).filter(GaodeMapScene.typecode.like("12%")).scalar()
+        _crawlTotalHos = db.session.query(func.count(GaodeMapScene.id)).filter(GaodeMapScene.typecode.like("09%")).scalar()
+        crawlTotalRes = _crawlTotalRes//10000
+        crawlTotalHos = _crawlTotalHos//10000
+        crawlTotalNumWithShape = db.session.query(func.count(GaodeMapScene.id)).filter(GaodeMapScene.wgs_shape != None).scalar()
+        _crawlTotalResWithShape = db.session.query(func.count(GaodeMapScene.id)).filter(GaodeMapScene.typecode.like("12%"),GaodeMapScene.wgs_shape != None).scalar()
+        _crawlTotalHosWithShape = db.session.query(func.count(GaodeMapScene.id)).filter(GaodeMapScene.typecode.like("09%"),GaodeMapScene.wgs_shape != None).scalar()
+        crawlTotalResWithShape = _crawlTotalResWithShape//10000
+        crawlTotalHosWithShape = _crawlTotalHosWithShape//10000
+        return render_template('index.html',crawlTotalNum=crawlTotalNum,crawlTotalRes=crawlTotalRes,crawlTotalHos=crawlTotalHos,crawlTotalNumWithShape=crawlTotalNumWithShape,crawlTotalResWithShape=crawlTotalResWithShape,crawlTotalHosWithShape=crawlTotalHosWithShape)
 
 
-@index.route('/download/', methods=['GET'])
-@login_required
-def download1():
-    filename = "downlaodcsvindex.xls"
-    return send_from_directory(DIRECTORY, filename, as_attachment=True)
+
+
+
 
 
 

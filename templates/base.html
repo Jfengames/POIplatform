@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %}-POI爬虫平台</title>
-    <link rel="stylesheet" href="{{url_for('static',filename='css/bootstrap.min.css')}}" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{url_for('static',filename='css/bootstrap.min.css')}}" >
     <script src="{{url_for('static',filename='js/jquery.min.js')}}"></script>
-    <script src="{{url_for('static',filename='js/bootstrap.min.js')}}" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="{{url_for('static',filename='js/bootstrap.min.js')}}" ></script>
+    <script src="{{ url_for('static',filename='js/layui.js') }}"></script>
     <link rel="stylesheet"  href="{{url_for('static',filename='css/base.css')}}">
     {% block head %}{% endblock %}
 </head>
 <body>
 	<div class="navbar-title" style="position:fixed;">
 		<div style="float: left;">
-			<a href="{{url_for('index.home')}}">
+			<a href="{{url_for('index.indexs')}}">
                 <img class="logo" src="{{url_for('static',filename='images/2.png')}}">
 	        </a>
     	</div>
@@ -30,18 +31,20 @@
 	</div>
 	<div id="navbar-body">
 		<ul>
-            <a href="{{url_for('index.home')}}">
+
+
+            <a href="{{url_for('index.indexs')}}">
                 <li class="navbar-home" >
                     <i class="home"></i>
-                    <p>&nbsp;&nbsp;&nbsp;&nbsp;爬取数据</p>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;主页</p>
                 </li>
             </a>
-{#            <a href="{{url_for('crawl.spider')}}">#}
-{#			    <li class="navbar-spider" >#}
-{#				    <i class="spider"></i>#}
-{#				    <p>&nbsp;&nbsp;&nbsp;&nbsp;爬取数据</p>#}
-{#			    </li>#}
-{#            </a>#}
+            <a href="{{url_for('crawl.crawls')}}">
+			    <li class="navbar-spider" >
+				    <i class="spider"></i>
+				    <p>&nbsp;&nbsp;&nbsp;&nbsp;爬取数据</p>
+			    </li>
+            </a>
             <a href="{{url_for('analysis.home')}}">
                 <li class="navbar-data" >
                     <i class="data"></i>
