@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>热力图</title>
+    <link rel="stylesheet" href="css/tundra.css">
+    <link rel="stylesheet" href="css/esri.css">
+    <style>
+        html, body, #mapDiv {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            width:100%;
+        }
+    </style>
+    <script>
+        var dojoConfig = {
+            paths: {
+                ArcGIS: location.pathname.replace(/\/[^/]+$/, "") + "/js/arcgis",
+            }
+        };
+    </script>
+    <script>
+        var heatMap;
+    </script>
+</head>
+<body>
+    <div id="mapDiv"></div>
+    <script type="text/javascript" src="js/arcgis/gps-lean-adding.js"></script>
+    <script type="text/javascript" src="js/arcgis/cityCenter.js"></script>
+    <script type="text/javascript" src="js/global.js"></script>
+    <script>
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        /*script.setAttribute('djConfig','parseOnLoad: true');*/
+        script.onload = function(){
+            var s = document.createElement('script');
+            s.type = 'text/javascript';
+            s.src = 'js/deepCoverageArcGIS.js';
+            document.body.append(s);
+        };
+        script.src = arcgisJsIP + "/arcgis_js_api/library/3.15/3.15compact/init.js";
+        document.body.append(script);
+    </script>
+</body>
+</html>
