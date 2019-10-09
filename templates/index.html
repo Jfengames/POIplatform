@@ -31,10 +31,10 @@
                     <span class="layui-badge layui-bg-blue layuiadmin-badge">年</span>
                   </div>
                   <div class="layui-card-body layuiadmin-card-list">
-                    <p class="layuiadmin-big-font">{{ crawlTotalNum }}</p>
+                    <p class="layuiadmin-big-font" style="font-size: 36px;color: #666">{{ crawlTotalNum }}</p>
                     <p>
                       居民区爬取量/医院爬取量
-                      <span class="layuiadmin-span-color">{{ crawlTotalRes }}万/{{ crawlTotalHos }}万 <i class="layui-inline layui-icon layui-icon-flag"></i></span>
+                      <span class="layuiadmin-span-color">{{ crawlTotalRes }}万/{{ crawlTotalHos }}万 </span>
                     </p>
                   </div>
                 </div>
@@ -46,10 +46,10 @@
                     <span class="layui-badge layui-bg-green layuiadmin-badge">月</span>
                   </div>
                   <div class="layui-card-body layuiadmin-card-list">
-                    <p class="layuiadmin-big-font">{{ crawlTotalNumWithShape }}</p>
+                    <p class="layuiadmin-big-font" style="font-size: 36px;color: #666">{{ crawlTotalNumWithShape }}</p>
                     <p>
                       居民区爬取量(有边界)/医院爬取量(有边界)
-                      <span class="layuiadmin-span-color">{{ crawlTotalResWithShape }}万/{{ crawlTotalHosWithShape }}万 <i class="layui-inline layui-icon layui-icon-face-smile-b"></i></span>
+                      <span class="layuiadmin-span-color">{{ crawlTotalResWithShape }}万/{{ crawlTotalHosWithShape }}万 </span>
                     </p>
                   </div>
                 </div>
@@ -62,10 +62,10 @@
                   </div>
                   <div class="layui-card-body layuiadmin-card-list">
 
-                    <p class="layuiadmin-big-font">{{ crawlTotalToday }}</p>
+                    <p class="layuiadmin-big-font" style="font-size: 36px;color: #666">{{ crawlTotalToday }}</p>
                     <p>
                       有边界
-                      <span class="layuiadmin-span-color">{{ crawlTotalTodayWithShape }}<i class="layui-inline layui-icon layui-icon-dollar"></i></span>
+                      <span class="layuiadmin-span-color">{{ crawlTotalTodayWithShape }}</span>
                     </p>
                   </div>
                 </div>
@@ -73,14 +73,14 @@
               <div class="layui-col-sm8">
                   <div class="layui-card">
                       <div class="layui-card-header">
-                          访问量
+                          POI数量
 {#                          <div class="layui-btn-group layuiadmin-btn-group">#}
 {#                              <a href="javascript:;" class="layui-btn layui-btn-primary layui-btn-xs">去年</a>#}
 {#                              <a href="javascript:;" class="layui-btn layui-btn-primary layui-btn-xs">今年</a>#}
 {#                          </div>#}
                       </div>
                       <div class="layui-card-body">
-                          <div class="layui-row">
+                          <div class="layui-row" style="margin-left: 5px">
                               <div id="main" style="width:100%;height:300px;"></div>
                           </div>
                       </div>
@@ -98,10 +98,24 @@
               </div>
               <div class="layui-col-sm4">
                 <div class="layui-card">
-                  <div class="layui-card-header">帖子</div>
+                 <div class="layui-card-header">论坛</div>
                   <div class="layui-card-body" style="height:304px;overflow: auto;">
                     <ul class="layuiadmin-card-status layuiadmin-home2-usernote">
-
+                        {% for card in cards %}
+                            <li>
+                                <div class="note-group" style="">
+                                    <p class="note-title" style="font-size: 1.17em;color: #666;width: 100%;font-weight: 700;">
+                                        {{ card.title }}
+                                    </p>
+                                    <p class="note-content" style="font-size: 14px;line-height: 26px;color: #666" >{{ card.content }}</p>
+                                    <div class="note-info" style="text-align:right;">
+                                        <span class="note-author" style="color: #666;font-size: 14px">作者:{{ card.author.username }}&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                        <span class="note-time" style="color: #666;font-size: 14px">时间:{{ card.create_time }}</span>
+                                    </div>
+                                </div>
+                            </li>
+                            <hr>
+                        {% endfor %}
                     </ul>
                   </div>
                 </div>
@@ -110,7 +124,12 @@
                 <div class="layui-row layui-col-space15">
                   <div class="layui-col-sm12">
                     <div class="layui-card">
-                      <div class="layui-card-header">用户全国分布</div>
+                      <div class="layui-card-header">POI数量
+                          <div class="layui-btn-group layuiadmin-btn-group">
+                              <a href="javascript:;" class="layui-btn layui-btn-primary layui-btn-xs">居民区</a>
+                              <a href="javascript:;" class="layui-btn layui-btn-primary layui-btn-xs">医院</a>
+                          </div>
+                      </div>
                       <div class="layui-card-body">
                         <div class="layui-row layui-col-space15">
                           <div class="layui-col-sm4">
@@ -133,26 +152,26 @@
                                   <td>{{ listOfcrawlTotalResSorted[1][0] }}</td>
                                   <td>{{ listOfcrawlTotalResSorted[1][1] }}</td>
                                 </tr>
-                                <tr>
-                                  <td>3</td>
-                                  <td>{{ listOfcrawlTotalResSorted[2][0] }}</td>
-                                  <td>{{ listOfcrawlTotalResSorted[2][1] }}</td>
-                                </tr>
-                                <tr>
-                                  <td>4</td>
-                                  <td>{{ listOfcrawlTotalResSorted[3][0] }}</td>
-                                  <td>{{ listOfcrawlTotalResSorted[3][1] }}</td>
-                                </tr>
-                                <tr>
-                                  <td>5</td>
-                                  <td>{{ listOfcrawlTotalResSorted[4][0] }}</td>
-                                  <td>{{ listOfcrawlTotalResSorted[4][1] }}</td>
-                                </tr>
-                                <tr>
-                                  <td>6</td>
-                                  <td>{{ listOfcrawlTotalResSorted[5][0] }}</td>
-                                  <td>{{ listOfcrawlTotalResSorted[5][1] }}</td>
-                                </tr>
+{#                                <tr>#}
+{#                                  <td>3</td>#}
+{#                                  <td>{{ listOfcrawlTotalResSorted[2][0] }}</td>#}
+{#                                  <td>{{ listOfcrawlTotalResSorted[2][1] }}</td>#}
+{#                                </tr>#}
+{#                                <tr>#}
+{#                                  <td>4</td>#}
+{#                                  <td>{{ listOfcrawlTotalResSorted[3][0] }}</td>#}
+{#                                  <td>{{ listOfcrawlTotalResSorted[3][1] }}</td>#}
+{#                                </tr>#}
+{#                                <tr>#}
+{#                                  <td>5</td>#}
+{#                                  <td>{{ listOfcrawlTotalResSorted[4][0] }}</td>#}
+{#                                  <td>{{ listOfcrawlTotalResSorted[4][1] }}</td>#}
+{#                                </tr>#}
+{#                                <tr>#}
+{#                                  <td>6</td>#}
+{#                                  <td>{{ listOfcrawlTotalResSorted[5][0] }}</td>#}
+{#                                  <td>{{ listOfcrawlTotalResSorted[5][1] }}</td>#}
+{#                                </tr>#}
                               </tbody>
                             </table>
                           </div>
@@ -202,6 +221,13 @@
             title: {
                 text: ''
             },
+            grid:{
+                x:60,
+                y:35,
+                x2:5,
+                y2:45,
+                borderWidth:1
+            },
             tooltip: {},
             legend: {
                 data:['居民区','医院']
@@ -216,16 +242,28 @@
                 data: ['安徽', '北京', '重庆', '福建', '广东', '甘肃', '广西', '贵州', '河南', '湖北', '河北', '海南', '黑龙江', '湖南', '吉林', '江苏',
                      '江西', '辽宁', '内蒙古', '宁夏', '青海', '四川', '山东', '上海', '陕西', '山西', '天津', '云南', '浙江','新疆','西藏']
             },
-            yAxis: {},
+            yAxis: {
+
+            },
             series: [{
                 name: '居民区',
                 type: 'bar',
                 stack: '总量',
+                itemStyle:{
+                    normal:{
+                        color:'#009688'
+                    }
+                },
                 data: {{ listOfcrawlTotalRes }}
             },{
                 name: '医院',
                 type: 'bar',
                 stack: '总量',
+                itemStyle:{
+                    normal:{
+                        color:'#ff4d4d'
+                    }
+                },
                 data: {{ listOfcrawlTotalHos }}
             }]
         };
@@ -267,7 +305,18 @@
                 data : [
                     {
                         value : [{{ratioOfTotalInsideRes}}, {{ratioOfTotalNearRes}}, {{ratioOfTotalMiddleRes}}, {{ratioOfTotalInsideHos}}, {{ratioOfTotalNearHos}}, {{ratioOfTotalMiddelHos}}],
-                        name : '基站与场景关联覆盖占比'
+                        name : '基站与场景关联覆盖占比',
+                        areaStyle: {
+                            normal: {
+                                opacity: 0.4,
+                                color: '#009688'
+                            }
+                        },
+                        itemStyle: {
+                            normal: {
+                                color: '#009688'
+                            }
+                        }
                     }
                 ]
             }]
@@ -285,14 +334,14 @@
             },
             //左侧小导航图标
             visualMap: {
-                show : true,
-                x: 'left',
-                y: 'bottom',
-                splitList: [
-                    {start: 20000, end: 110000},{start: 10000, end: 20000},
-                    {start: 5000, end: 10000},{start: 0, end: 5000},
-                ],
-                color: ['#5475f5', '#9feaa5', '#85daef','#74e2ca']
+                min: 0,
+                max: 110000,
+                text:['高','低'],
+                realtime: false,
+                calculable: true,
+                inRange: {
+                    color: ['#fff','#009688']
+                }
             },
             series: [{
                 name: '数据',

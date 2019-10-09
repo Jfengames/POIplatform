@@ -1,21 +1,31 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta charset="UTF-8">
+	<title>POI爬虫平台</title>
+	<meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
 
-{% block title %}论坛{% endblock %}
-
-{% block head %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/note.css') }}">
-{% endblock %}
-
-{% block main %}
-    <ul class="note-list-group">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/font.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/xadmin.css') }}">
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename='lib/layui/layui.js') }}" charset="utf-8"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/xadmin.js') }}"></script>
+    <link rel="stylesheet" href="{{url_for('static',filename='css/bootstrap.min.css')}}" >
+    <script src="{{url_for('static',filename='js/jquery.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/bootstrap.min.js')}}" ></script>
+    <link rel="stylesheet"  href="{{url_for('static',filename='css/base.css')}}">
+</head>
+  <body>
+    <div class="x-body">
+      <div class="layui-row">
+        <ul class="note-list-group">
         {% for card in cards %}
             <li>
-{#                <div class="avatar-group">#}
-{#                    <img src="{{ url_for('static', filename='images/2.png')}}" class="avatar">#}
-{#                </div>#}
                 <div class="note-group" style="">
-                    <p class="note-title" style="font-size: 30px;color: #5688ee;width: 100%;font-weight: 700;">
-                        <a href="{{ url_for('note.detail', note_id=card.id) }}">{{ card.title }}</a>
+                    <p class="note-title" style="font-size: 30px;color: #009688;width: 100%;font-weight: 700;">
+                        <a href="{{ url_for('note.detail', note_id=card.id) }}" style="color: #009688">{{ card.title }}</a>
                     </p>
                     <p class="note-content" style="font-size: 15px;line-height: 26px;" >{{ card.content }}</p>
                     <div class="note-info" style="text-align:right;">
@@ -26,5 +36,8 @@
             </li>
             <hr>
         {% endfor %}
-    </ul>
-{% endblock %}
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,27 +1,97 @@
 from flask import render_template, request, session, Blueprint
-from database import User,Adcode,Scenecode,ScrapeMissions,db
+from database import User,Adcode,Scenecode,ScrapeMissions,db,IndexShow,Note
 from decorators import login_required
 from database import User,Adcode,Scenecode,ScrapeMissions,db,GaodeMapScene
 from config import KEYS
 from sqlalchemy import func
+from toolbox import takeSecond
 index = Blueprint('index',__name__)
 
+@index.route('/',methods=['GET','POST'])
+@login_required
+def home():
 
-@index.route('/',methods=['GET', 'POST'])
+    return render_template('base.html')
+
+@index.route('/index/',methods=['GET', 'POST'])
 @login_required
 def indexs():
     if request.method == 'GET':
-        crawlTotalNum = db.session.query(func.count(GaodeMapScene.id)).scalar()
-        _crawlTotalRes = db.session.query(func.count(GaodeMapScene.id)).filter(GaodeMapScene.typecode.like("12%")).scalar()
-        _crawlTotalHos = db.session.query(func.count(GaodeMapScene.id)).filter(GaodeMapScene.typecode.like("09%")).scalar()
-        crawlTotalRes = _crawlTotalRes//10000
-        crawlTotalHos = _crawlTotalHos//10000
-        crawlTotalNumWithShape = db.session.query(func.count(GaodeMapScene.id)).filter(GaodeMapScene.wgs_shape != None).scalar()
-        _crawlTotalResWithShape = db.session.query(func.count(GaodeMapScene.id)).filter(GaodeMapScene.typecode.like("12%"),GaodeMapScene.wgs_shape != None).scalar()
-        _crawlTotalHosWithShape = db.session.query(func.count(GaodeMapScene.id)).filter(GaodeMapScene.typecode.like("09%"),GaodeMapScene.wgs_shape != None).scalar()
-        crawlTotalResWithShape = _crawlTotalResWithShape//10000
-        crawlTotalHosWithShape = _crawlTotalHosWithShape//10000
-        return render_template('index.html',crawlTotalNum=crawlTotalNum,crawlTotalRes=crawlTotalRes,crawlTotalHos=crawlTotalHos,crawlTotalNumWithShape=crawlTotalNumWithShape,crawlTotalResWithShape=crawlTotalResWithShape,crawlTotalHosWithShape=crawlTotalHosWithShape)
+        # provinces = ['安徽', '北京', '重庆', '福建', '广东', '甘肃', '广西', '贵州', '河南', '湖北', '河北', '海南', '黑龙江', '湖南', '吉林', '江苏',
+        #              '江西', '辽宁', '内蒙古', '宁夏', '青海', '四川', '山东', '上海', '陕西', '山西', '天津', '云南', '浙江','新疆','西藏']
+        provinces = ['安徽','北京']
+        crawlTotalNum =0
+        crawlTotalRes = 0
+        listOfcrawlTotalRes = []
+        listOfcrawlTotalResSorted = []
+        crawlTotalHos = 0
+        listOfcrawlTotalHos = []
+        listOfcrawlTotalHosSorted = []
+        crawlTotalNumWithShape = 0
+        crawlTotalResWithShape =0
+        crawlTotalHosWithShape =0
+        crawlTotalToday = 0
+        crawlTotalTodayWithShape = 0
+        NumOfTotalInsideRes = 0
+        NumOfTotalNearRes = 0
+        NumOfTotalMiddleRes = 0
+        NumOfTotalInsideHos = 0
+        NumOfTotalNearHos = 0
+        NumOfTotalMiddelHos = 0
+        for province in provinces:
+            indexShow = IndexShow.query.filter(IndexShow.province == province).first()
+            print(indexShow)
+            crawlNum = indexShow.crawlNum
+            crawlTotalNum += crawlNum
+            crawlRes = indexShow.crawlRes
+            crawlTotalRes += crawlRes
+            listOfcrawlTotalRes.append(crawlRes)
+            listOfcrawlTotalResSorted.append((province,crawlRes))
+            print(listOfcrawlTotalResSorted)
+            crawlHos = indexShow.crawlHos
+            crawlTotalHos += crawlHos
+            listOfcrawlTotalHos.append(crawlHos)
+            listOfcrawlTotalHosSorted.append((province,crawlHos))
+            crawlNumWithShape = indexShow.crawlNumWithShape
+            crawlTotalNumWithShape +=crawlNumWithShape
+            crawlResWithShape = indexShow.crawlResWithShape
+            crawlTotalResWithShape += crawlResWithShape
+            crawlHosWithShape = indexShow.crawlHosWithShape
+            crawlTotalHosWithShape += crawlHosWithShape
+            crawlToday = indexShow.crawlToday
+            crawlTotalToday += crawlToday
+            crawlTodayWithShape = indexShow.crawlTodayWithShape
+            crawlTotalTodayWithShape += crawlTodayWithShape
+            NumOfInsideRes = indexShow.NumOfInsideRes
+            NumOfNearRes = indexShow.NumOfNearRes
+            NumOfMiddleRes = indexShow.NumOfMiddleRes
+            NumOfInsideHos = indexShow.NumOfInsideHos
+            NumOfNearHos = indexShow.NumOfInsideHos
+            NumOfMiddelHos = indexShow.NumOfMiddelHos
+            NumOfTotalInsideRes += NumOfInsideRes
+            NumOfTotalNearRes += NumOfNearRes
+            NumOfTotalMiddleRes += NumOfMiddleRes
+            NumOfTotalInsideHos += NumOfInsideHos
+            NumOfTotalNearHos += NumOfNearHos
+            NumOfTotalMiddelHos += NumOfMiddelHos
+        crawlTotalRes = crawlTotalRes // 10000
+        crawlTotalHos = crawlTotalHos // 10000
+        crawlTotalResWithShape = crawlTotalResWithShape // 10000
+        crawlTotalHosWithShape = crawlTotalHosWithShape // 10000
+        ratioOfTotalInsideRes = 0#NumOfTotalInsideRes/(NumOfTotalInsideRes+NumOfTotalNearRes+NumOfTotalMiddleRes)
+        ratioOfTotalNearRes = 0#NumOfTotalNearRes/(NumOfTotalInsideRes+NumOfTotalNearRes+NumOfTotalMiddleRes)
+        ratioOfTotalMiddleRes = 0#NumOfTotalMiddleRes/(NumOfTotalInsideRes+NumOfTotalNearRes+NumOfTotalMiddleRes)
+        ratioOfTotalInsideHos = 0#NumOfTotalInsideHos/(NumOfTotalInsideHos+NumOfTotalNearHos+NumOfTotalMiddelHos)
+        ratioOfTotalNearHos = 0#NumOfTotalNearHos/(NumOfTotalInsideHos+NumOfTotalNearHos+NumOfTotalMiddelHos)
+        ratioOfTotalMiddelHos = 0#NumOfTotalMiddelHos/(NumOfTotalInsideHos+NumOfTotalNearHos+NumOfTotalMiddelHos)
+        listOfcrawlTotalResSorted.sort(key=takeSecond,reverse=True)
+        listOfcrawlTotalHosSorted.sort(key=takeSecond,reverse=True)
+        context = {
+            'cards': Note.query.order_by('create_time').all()
+        }
+        return render_template('index.html',crawlTotalNum=crawlTotalNum,crawlTotalRes=crawlTotalRes,crawlTotalHos=crawlTotalHos,crawlTotalNumWithShape=crawlTotalNumWithShape,crawlTotalResWithShape=crawlTotalResWithShape,crawlTotalHosWithShape=crawlTotalHosWithShape,
+                               ratioOfTotalInsideRes=ratioOfTotalInsideRes,ratioOfTotalNearRes=ratioOfTotalNearRes,ratioOfTotalMiddleRes=ratioOfTotalMiddleRes,ratioOfTotalInsideHos=ratioOfTotalInsideHos,ratioOfTotalNearHos=ratioOfTotalNearHos,ratioOfTotalMiddelHos=ratioOfTotalMiddelHos,
+                               listOfcrawlTotalRes=listOfcrawlTotalRes,listOfcrawlTotalHos=listOfcrawlTotalHos,listOfcrawlTotalResSorted=listOfcrawlTotalResSorted,listOfcrawlTotalHosSorted=listOfcrawlTotalHosSorted,crawlTotalToday=crawlTotalToday,crawlTotalTodayWithShape=crawlTotalTodayWithShape,**context)
 
 
 

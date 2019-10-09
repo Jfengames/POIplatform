@@ -32,11 +32,12 @@ def login():
 
             session.permanent = True
 
-            return redirect(url_for('index.indexs'))
+            return redirect(url_for('index.home'))
 
 
         else:
-            return u'邮箱或者密码错误！'
+            flash(u'邮箱或者密码错误！')
+            return redirect(url_for('user.login'))
 
 
 

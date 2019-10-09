@@ -45,11 +45,11 @@ def data_operation(city,_city):
     analysis_new_mission_gaodemapscene_tagged(city)
     # print('小区与场景关联')
     # 点在面内‘1’
-    analysis_new_mission_commonparameters_tagged_contains(city)
-    # 100米范围内‘2’
-    analysis_new_mission_commonparameters_tagged_100(city)
-    # 100-200米范围内‘3’
-    analysis_new_mission_commonparameters_tagged_100_200(city)
+    # analysis_new_mission_commonparameters_tagged_contains(city)
+    # # 100米范围内‘2’
+    # analysis_new_mission_commonparameters_tagged_100(city)
+    # # 100-200米范围内‘3’
+    # analysis_new_mission_commonparameters_tagged_100_200(city)
 
     downloadcsvanalysis(city)
 

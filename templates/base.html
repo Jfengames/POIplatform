@@ -1,66 +1,243 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>{% block title %}{% endblock %}-POI爬虫平台</title>
-    <link rel="stylesheet" href="{{url_for('static',filename='css/bootstrap.min.css')}}" >
+	<meta charset="UTF-8">
+	<title>POI爬虫平台</title>
+	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/font.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/basic.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/xadmin.css') }}">
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script src="{{url_for('static',filename='js/jquery.min.js')}}"></script>
     <script src="{{url_for('static',filename='js/bootstrap.min.js')}}" ></script>
-    <script src="{{ url_for('static',filename='js/layui.js') }}"></script>
-    <link rel="stylesheet"  href="{{url_for('static',filename='css/base.css')}}">
-    {% block head %}{% endblock %}
+    <script src="{{ url_for('static', filename='lib/layui/layui.js') }}" charset="utf-8"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/xadmin.js') }}"></script>
+    <style>
+        #side-nav{
+            margin-top: -10px;
+        }
+        ul{
+            margin:0 auto;
+            position:relative;
+        }
+        ul li{
+            border-bottom:1px solid #F8F8F8;}
+        ul li a{
+            color:#666;
+            display:block;}
+        ul li a:hover{
+            text-decoration:none;}
+        #lanPos{
+            height:40px;
+            line-height:40px;
+            background:#F8F8F8;
+            border-left:5px solid #009688;
+            position:absolute;
+            left:0;
+            top:0;
+            transition:top .2s;}
+    </style>
 </head>
 <body>
-	<div class="navbar-title" style="position:fixed;">
-		<div style="float: left;">
-			<a href="{{url_for('index.indexs')}}">
-                <img class="logo" src="{{url_for('static',filename='images/2.png')}}">
-	        </a>
-    	</div>
-        <div class="title-user">POI爬虫平台</div>
-        <div class="navbar-user">
-			{% if user %}
-                <li><a href="{{url_for('user.logout')}}">注销</a></li>
-                <li><a href="#">{{user.username}}</a></li>
-            {% else %}                  
-            	<li><a href="{{url_for('user.register')}}">注册</a></li>
-            	<li><a href="{{url_for('user.login')}}">登录</a></li>
-            {% endif %}        	
-	        <li><a href="{{url_for('note.card')}}" >发布帖子</a></li>
-		</div>
-	</div>
-	<div id="navbar-body">
-		<ul>
+    <!-- 顶部开始 -->
+    <div class="container">
+        <div class="logo"><a href="/">POI爬虫平台</a></div>
+        <div class="left_open">
+            <i title="展开左侧栏" class="iconfont">&#xe699;</i>
+        </div>
+        <ul class="layui-nav right" lay-filter="">
+          <li class="layui-nav-item">
+            <a href="javascript:;">{{user.username}}</a>
+            <dl class="layui-nav-child"> <!-- 二级菜单 -->
+              <dd><a href="./login">退出</a></dd>
+            </dl>
+          </li>
+          <li class="layui-nav-item to-index"><a href="/">首页</a></li>
+        </ul>
 
-
-            <a href="{{url_for('index.indexs')}}">
-                <li class="navbar-home" >
-                    <i class="home"></i>
-                    <p>&nbsp;&nbsp;&nbsp;&nbsp;主页</p>
-                </li>
-            </a>
-            <a href="{{url_for('crawl.crawls')}}">
-			    <li class="navbar-spider" >
-				    <i class="spider"></i>
-				    <p>&nbsp;&nbsp;&nbsp;&nbsp;爬取数据</p>
-			    </li>
-            </a>
-            <a href="{{url_for('analysis.home')}}">
-                <li class="navbar-data" >
-                    <i class="data"></i>
-                    <p>&nbsp;&nbsp;&nbsp;&nbsp;场景分析</p>
-                </li>
-            </a>
-            <a href="{{url_for('note.notes')}}">
-                <li class="navbar-note">
-                    <i class="note"></i>
-                    <p>&nbsp;&nbsp;&nbsp;&nbsp;论坛</p>
-                </li>
-            </a>
-		</ul>
-	</div>
-	<div class="main">
-    {% block main %}{% endblock %}
     </div>
+    <!-- 顶部结束 -->
+    <!-- 中部开始 -->
+     <!-- 左侧菜单开始 -->
+    <div class="left-nav">
+      <div id="side-nav">
+        <ul id="nav">
+            <li>
+                <a _href="{{ url_for('index.indexs') }}">
+                    <i class="iconfont">
+                        <img src="{{url_for('static',filename='images/home.png')}}">
+                    </i>
+                    <cite>首页</cite>
+                </a>
+            </li>
+            <li>
+                <a _href="{{ url_for('crawl.crawls') }}">
+                    <i class="iconfont">
+                        <img src="{{url_for('static',filename='images/spider.png')}}">
+                    </i>
+                    <cite>爬取数据</cite>
+                </a>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont">
+                        <img src="{{url_for('static',filename='images/data.png')}}">
+                    </i>
+                    <cite>数据分析</cite>
+                    <i class="iconfont nav_right ">&#xe697;</i>
+                </a>
+                <ul class="sub-menu">
+                    <li>
+                        <a _href="{{ url_for('analysis.new_mission_todos') }}">
+                            <i class="iconfont">
+                                >
+                            </i>
+                            <cite>新建任务</cite>
+                        </a>
+                    </li >
+                    <li>
+                        <a _href="{{ url_for('analysis.data_search') }}">
+                            <i class="iconfont">
+                                >
+                            </i>
+                            <cite>数据查询</cite>
+                        </a>
+                    </li >
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont">
+                        <img src="{{url_for('static',filename='images/note.png')}}">
+                    </i>
+                    <cite>论坛</cite>
+                    <i class="iconfont nav_right">&#xe697;</i>
+                </a>
+                <ul class="sub-menu">
+                    <li>
+                        <a _href="{{ url_for("note.card") }}">
+                            <i class="iconfont">
+                                >
+                            </i>
+                            <cite>发布帖子</cite>
+                        </a>
+                    </li >
+                    <li>
+                        <a _href="{{ url_for("note.notes") }}">
+                            <i class="iconfont">
+                                >
+                            </i>
+                            <cite>查看帖子</cite>
+                        </a>
+                    </li >
+                </ul>
+            </li>
+            <div id="lanPos"></div>
+        </ul>
+      </div>
+    </div>
+    <!-- <div class="x-slide_left"></div> -->
+    <!-- 左侧菜单结束 -->
+    <!-- 右侧主体开始 -->
+    <div class="page-content">
+        <div class="layui-tab tab" lay-filter="xbs_tab" lay-allowclose="false">
+          <ul class="layui-tab-title">
+            <li class="home"><i class="layui-icon">&#xe68e;</i>首页</li>
+          </ul>
+          <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <iframe src='/index/' frameborder="0" scrolling="yes" class="x-iframe"></iframe>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="page-content-bg"></div>
+    <!-- 右侧主体结束 -->
+    <!-- 中部结束 -->
+    <!-- 底部开始 -->
+    <div class="footer">
+        <div class="copyright">© 2018 中国移动设计院--网研中心</div>
+    </div>
+    <!-- 底部结束 -->
 </body>
+<script>
+    $(function(){
+        $('.left-nav #side-nav #nav li').hover(function(){
+            $('#lanPos').css('top',($(this).offset().top - 46))
+        })
+	});
+</script>
 </html>
+
+
+
+{#<!DOCTYPE html>#}
+{#<html>#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <title>{% block title %}{% endblock %}-POI爬虫平台</title>#}
+{#    <link rel="stylesheet" href="{{url_for('static',filename='css/bootstrap.min.css')}}" >#}
+{#    <script src="{{url_for('static',filename='js/jquery.min.js')}}"></script>#}
+{#    <script src="{{url_for('static',filename='js/bootstrap.min.js')}}" ></script>#}
+{##}
+{#    <link rel="stylesheet"  href="{{url_for('static',filename='css/base.css')}}">#}
+{#    {% block head %}{% endblock %}#}
+{#</head>#}
+{#<body>#}
+{#	<div class="navbar-title" >#}
+{#		<div style="float: left;">#}
+{#			<a href="{{url_for('index.indexs')}}">#}
+{#                <img class="logo" src="{{url_for('static',filename='images/2.png')}}">#}
+{#	        </a>#}
+{#    	</div>#}
+{#        <div class="title-user">POI爬虫平台</div>#}
+{#        <div class="navbar-user">#}
+{#			{% if user %}#}
+{#                <li><a href="{{url_for('user.logout')}}">注销</a></li>#}
+{#                <li><a href="#">{{user.username}}</a></li>#}
+{#            {% else %}                  #}
+{#            	<li><a href="{{url_for('user.register')}}">注册</a></li>#}
+{#            	<li><a href="{{url_for('user.login')}}">登录</a></li>#}
+{#            {% endif %}        	#}
+{#	        <li><a href="{{url_for('note.card')}}" >发布帖子</a></li>#}
+{#		</div>#}
+{#	</div>#}
+{#	<div id="navbar-body">#}
+{#		<ul>#}
+{##}
+{##}
+{#            <a href="{{url_for('index.indexs')}}">#}
+{#                <li class="navbar-home" >#}
+{#                    <i class="home"></i>#}
+{#                    <p>&nbsp;&nbsp;&nbsp;&nbsp;主页</p>#}
+{#                </li>#}
+{#            </a>#}
+{#            <a href="{{url_for('crawl.crawls')}}">#}
+{#			    <li class="navbar-spider" >#}
+{#				    <i class="spider"></i>#}
+{#				    <p>&nbsp;&nbsp;&nbsp;&nbsp;爬取数据</p>#}
+{#			    </li>#}
+{#            </a>#}
+{#            <a href="{{url_for('analysis.home')}}">#}
+{#                <li class="navbar-data" >#}
+{#                    <i class="data"></i>#}
+{#                    <p>&nbsp;&nbsp;&nbsp;&nbsp;场景分析</p>#}
+{#                </li>#}
+{#            </a>#}
+{#            <a href="{{url_for('note.notes')}}">#}
+{#                <li class="navbar-note">#}
+{#                    <i class="note"></i>#}
+{#                    <p>&nbsp;&nbsp;&nbsp;&nbsp;论坛</p>#}
+{#                </li>#}
+{#            </a>#}
+{#		</ul>#}
+{#	</div>#}
+{#	<div class="main" style="margin-left: 240px">#}
+{#    {% block main %}{% endblock %}#}
+{#    </div>#}
+{#</body>#}
+{#</html>#}

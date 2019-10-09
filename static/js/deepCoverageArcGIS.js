@@ -92,40 +92,40 @@ function addFeatureLayer(){
         Query,QueryTask,PopupTemplate,FeatureLayer,SimpleMarkerSymbol,SimpleFillSymbol,SimpleLineSymbol,Color,UniqueValueRenderer
     ) {
 
-        var dataSource = new esri.layers.TableDataSource();
-        dataSource.workspaceId = "GONGCAN";
-        dataSource.dataSourceName = gcity+".shp";
-        var layerSource = new esri.layers.LayerDataSource();
-        layerSource.dataSource = dataSource;
-        var dynamicLayer = new FeatureLayer(arcgisIP+"/arcgis/rest/services/deepCoverage/deepCoverageArcGIS/MapServer/dynamicLayer", {
-            mode: FeatureLayer.MODE_SNAPSHOT,
-            outFields: ["*"],
-            source: layerSource,
-            infoTemplate: new PopupTemplate({
-                /*"title": "全部小区({小区中文名})",*/
-                "fieldInfos": [{
-                    "fieldName": "ANGLE",
-                    label: "方位角",
-                    visible: true
-                }]
-            }),
-            id:"Cell"
-          });
-        function createSector(size,azimuth,color){
-            var sms=new SimpleMarkerSymbol();
-            sms.setPath("M0,0,L0,100 L0,0 L-30,-96 A15,15 0 0,1 30,-96 z");
-            sms.setSize(size);
-            sms.setAngle(azimuth);
-            sms.setColor(new Color(color));
-            sms.setOutline(null);
-            return sms;
-        }
-        var renderer = new UniqueValueRenderer(createSector(30,0,'blue'), "ANGLE");
-        for (var i=0; i<=360 ;i+=10){
-            renderer.addValue(i, createSector(30,i,'blue'));
-        }
-        dynamicLayer.setRenderer(renderer);
-        map.addLayer(dynamicLayer);
+        // var dataSource = new esri.layers.TableDataSource();
+        // dataSource.workspaceId = "GONGCAN";
+        // dataSource.dataSourceName = gcity+".shp";
+        // var layerSource = new esri.layers.LayerDataSource();
+        // layerSource.dataSource = dataSource;
+        // var dynamicLayer = new FeatureLayer(arcgisIP+"/arcgis/rest/services/deepCoverage/deepCoverageArcGIS/MapServer/dynamicLayer", {
+        //     mode: FeatureLayer.MODE_SNAPSHOT,
+        //     outFields: ["*"],
+        //     source: layerSource,
+        //     infoTemplate: new PopupTemplate({
+        //         /*"title": "全部小区({小区中文名})",*/
+        //         "fieldInfos": [{
+        //             "fieldName": "ANGLE",
+        //             label: "方位角",
+        //             visible: true
+        //         }]
+        //     }),
+        //     id:"Cell"
+        //   });
+        // function createSector(size,azimuth,color){
+        //     var sms=new SimpleMarkerSymbol();
+        //     sms.setPath("M0,0,L0,100 L0,0 L-30,-96 A15,15 0 0,1 30,-96 z");
+        //     sms.setSize(size);
+        //     sms.setAngle(azimuth);
+        //     sms.setColor(new Color(color));
+        //     sms.setOutline(null);
+        //     return sms;
+        // }
+        // var renderer = new UniqueValueRenderer(createSector(30,0,'gray'), "ANGLE");
+        // for (var i=0; i<=360 ;i+=10){
+        //     renderer.addValue(i, createSector(30,i,'gray'));
+        // }
+        // dynamicLayer.setRenderer(renderer);
+        // map.addLayer(dynamicLayer);
 
 
         var dataSource1 = new esri.layers.TableDataSource();
@@ -178,18 +178,48 @@ function addFeatureLayer(){
             }),
             id:"building"
         });
-        var renderer1 = new UniqueValueRenderer(
-            new SimpleFillSymbol(
-                SimpleFillSymbol.STYLE_SOLID,
-                new SimpleLineSymbol(
-                    SimpleLineSymbol.STYLE_SOLID,
-                    new Color([99,147,200,1]),
-                    2
-                ),
-                new Color([34,29,97,0.25])
-            ),
-            "FID"
-        );
+
+        switch(gscene){
+            case "居民区":
+                var renderer1 = new UniqueValueRenderer(
+                    new SimpleFillSymbol(
+                        SimpleFillSymbol.STYLE_SOLID,
+                        new SimpleLineSymbol(
+                            SimpleLineSymbol.STYLE_SOLID,
+                            new Color([0,150,136,1]),
+                            2
+                        ),
+                        new Color([34,29,97,0.25])
+                    ),
+                    "FID"
+                );
+
+                break;
+            case "医院":
+                var renderer1 = new UniqueValueRenderer(
+                    new SimpleFillSymbol(
+                        SimpleFillSymbol.STYLE_SOLID,
+                        new SimpleLineSymbol(
+                            SimpleLineSymbol.STYLE_SOLID,
+                            new Color([255,77,77,1]),
+                            2
+                        ),
+                        new Color([255,229,229,0.25])
+                    ),
+                    "FID"
+                );
+                break;
+            case "美食":
+                dataSource1.workspaceId = "MEISHI";
+                break;
+            case "美景":
+                dataSource1.workspaceId = "MEIJING";
+                break;
+        }
+
+
+
+
         dynamicLayer1.setRenderer(renderer1);
         map.addLayer(dynamicLayer1);
     });

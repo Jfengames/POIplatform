@@ -10,9 +10,6 @@ $(function () {
   var tab = {
         tabAdd: function(title,url,id){
           //新增一个Tab项
-            console.log(title);
-            console.log(url);
-            console.log(id);
           element.tabAdd('xbs_tab', {
             title: title 
             ,content: '<iframe tab-id="'+id+'" frameborder="0" src="'+url+'" scrolling="yes" class="x-iframe"></iframe>'

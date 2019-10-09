@@ -1,0 +1,59 @@
+.page{
+    width: 1000px;
+
+}
+
+.page .pagination li{
+            text-align: center;
+            /*border: 1px solid #ddd;*/
+            position: relative;
+            float: left;
+            padding:0;
+            margin:0;
+        }
+.page .pagination .active a{
+    background:#009688;
+    color:#fff;
+}
+.page .pagination li a{
+    color:#009688;
+}
+.page .pagination li .prev{
+    padding:0 !important;
+}
+
+body{
+     width: 100%;
+     height: 100%;
+ }
+.x-body{
+     width: 100%;
+     height: 100%;
+ }
+.x-body .choice{
+     position: fixed;
+     z-index: 2;
+     left: 20px;
+     top:20px;
+ }
+.div-tk{
+      position: absolute;
+      top:20px;
+      width:90%;
+      height:90%;
+      overflow: auto;
+      background:#fff;
+      left:20px;
+      z-index:5;
+  }
+.mock{
+    position:absolute;
+    width:100%;
+    height: 100%;
+    background:#000;
+    opacity: .7;
+    z-index:1;
+    top:0;
+    display:none;
+    left:0;
+}

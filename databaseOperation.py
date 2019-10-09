@@ -9,7 +9,7 @@ def indexShow():
     database1 = pymysql.connect(host=HOST, user=USER, passwd=PASSWD, db=DB, use_unicode=True, charset="utf8")
     cursor1 = database1.cursor()
 
-    # provinces = ['安徽']
+    # provinces = ['北京']
     provinces = ['安徽', '北京', '重庆', '福建', '广东', '甘肃', '广西', '贵州', '河南', '湖北', '河北', '海南', '黑龙江', '湖南', '吉林', '江苏',
                  '江西', '辽宁', '内蒙古', '宁夏', '青海', '四川', '山东', '上海', '陕西', '山西', '天津', '云南', '浙江','新疆','西藏']
     for province in provinces:
@@ -107,21 +107,22 @@ def indexShow():
 
 
 
-    #     sql = """INSERT INTO indexShow (province,crawlNum,crawlRes,crawlHos,crawlNumWithShape,crawlResWithShape,crawlHosWithShape,crawlToday,crawlTodayWithShape,NumOfInsideRes,NumOfNearRes,NumOfMiddleRes,NumOfInsideHos,NumOfNearHos,NumOfMiddelHos)
-    # VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
-    #     values1 = (province,crawlNum,crawlRes,crawlHos,crawlNumWithShape,crawlResWithShape,crawlHosWithShape,crawlToday,crawlTodayWithShape,NumOfInsideRes,NumOfNearRes,NumOfMiddleRes,NumOfInsideHos,NumOfNearHos,NumOfMiddelHos)
-    #
+        sql = """INSERT INTO indexShow (province,crawlNum,crawlRes,crawlHos,crawlNumWithShape,crawlResWithShape,crawlHosWithShape,crawlToday,crawlTodayWithShape,NumOfInsideRes,NumOfNearRes,NumOfMiddleRes,NumOfInsideHos,NumOfNearHos,NumOfMiddelHos)
+    VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
+        values1 = (province,crawlNum,crawlRes,crawlHos,crawlNumWithShape,crawlResWithShape,crawlHosWithShape,crawlToday,crawlTodayWithShape,NumOfInsideRes,NumOfNearRes,NumOfMiddleRes,NumOfInsideHos,NumOfNearHos,NumOfMiddelHos)
+
     #     #
     #     # # 执行sql语句
-    #     cursor1.execute(sql, values1)
-        sql = """UPDATE indexShow SET crawlNum={},crawlRes={},crawlHos={},crawlNumWithShape={},crawlResWithShape={},crawlHosWithShape={},crawlToday={},crawlTodayWithShape={},NumOfInsideRes={},NumOfNearRes={},NumOfMiddleRes={},NumOfInsideHos={},NumOfNearHos={},NumOfMiddelHos={} WHERE province = '{}'
-        """.format(crawlNum,crawlRes,crawlHos,crawlNumWithShape,crawlResWithShape,crawlHosWithShape,crawlToday,crawlTodayWithShape,NumOfInsideRes,NumOfNearRes,NumOfMiddleRes,NumOfInsideHos,NumOfNearHos,NumOfMiddelHos,province)
+        cursor1.execute(sql, values1)
+    #     sql = """UPDATE indexShow SET crawlNum={},crawlRes={},crawlHos={},crawlNumWithShape={},crawlResWithShape={},crawlHosWithShape={},crawlToday={},crawlTodayWithShape={},NumOfInsideRes={},NumOfNearRes={},NumOfMiddleRes={},NumOfInsideHos={},NumOfNearHos={},NumOfMiddelHos={} WHERE province = '{}'
+    #     """.format(crawlNum,crawlRes,crawlHos,crawlNumWithShape,crawlResWithShape,crawlHosWithShape,crawlToday,crawlTodayWithShape,NumOfInsideRes,NumOfNearRes,NumOfMiddleRes,NumOfInsideHos,NumOfNearHos,NumOfMiddelHos,province)
         print(sql)
         # cursor1.execute(sql)
+        # 提交
+        database1.commit()
     cursor1.close()
 
-    # 提交
-    # database1.commit()
+
 
     # 关闭数据库连接
     database1.close()

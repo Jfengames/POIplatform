@@ -139,7 +139,7 @@ class GaodeMapScene(db.Model):
 
     name = db.Column(db.String(50))
 
-    city_adcode = db.Column(db.String(20))
+    adcode = db.Column(db.String(20))
 
     district = db.Column(db.String(50))
 
@@ -147,7 +147,7 @@ class GaodeMapScene(db.Model):
 
     longtitude = db.Column(db.Float(scale=10))
 
-    lat = db.Column(db.Float(scale=10))
+    latitude = db.Column(db.Float(scale=10))
 
     type = db.Column(db.String(100))
 
@@ -165,7 +165,7 @@ class GaodeMapScene(db.Model):
 
     wgs_shape = db.Column(db.Text)
 
-
+    create_time = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
 
 
 
@@ -177,11 +177,11 @@ class Gaodemapscene_tagged(db.Model):
     province = db.Column(db.String(50))
     city = db.Column(db.String(50))
     name = db.Column(db.String(50))
-    city_adcode = db.Column(db.String(20))
+    adcode = db.Column(db.String(20))
     district = db.Column(db.String(50))
     address = db.Column(db.String(100))
     longtitude = db.Column(db.Float(scale=10))
-    lat = db.Column(db.Float(scale=10))
+    latitude = db.Column(db.Float(scale=10))
     type = db.Column(db.String(100))
     typecode = db.Column(db.String(20))
     classify = db.Column(db.String(100))
@@ -411,3 +411,35 @@ class Todos(db.Model):
     author = db.relationship('User', backref=db.backref('tasks'))
     status = db.Column(db.Boolean, default=False)
     todo_city = db.Column(db.String(50))
+
+class IndexShow(db.Model):
+    __tablename__ = 'indexShow'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    province = db.Column(db.String(50),unique=True)
+    crawlNum = db.Column(db.Integer)
+    crawlRes = db.Column(db.Integer)
+    crawlHos = db.Column(db.Integer)
+    crawlNumWithShape = db.Column(db.Integer)
+    crawlResWithShape = db.Column(db.Integer)
+    crawlHosWithShape = db.Column(db.Integer)
+    crawlToday = db.Column(db.Integer)
+    crawlTodayWithShape = db.Column(db.Integer)
+    NumOfInsideRes = db.Column(db.Integer)
+    NumOfNearRes = db.Column(db.Integer)
+    NumOfMiddleRes = db.Column(db.Integer)
+    NumOfInsideHos = db.Column(db.Integer)
+    NumOfNearHos = db.Column(db.Integer)
+    NumOfMiddelHos = db.Column(db.Integer)
+
+
+
+
+# class GaodemapDistrictshape(db.Model):
+#     __tablename__ = 'gaodemap_districtshape'
+#     province = db.Column(db.String(50), default=None)
+#     city = db.Column(db.String(50), default=None)
+#     district = db.Column(db.String(50), default=None)
+#     citycode = db.Column(db.String(20), default=None)
+#     adcode = db.Column(db.String(200),primary_key=True, nullable=False)
+#     polyline = db.Column(db.Text())
+#     center = db.Column(db.String(50), default=None)

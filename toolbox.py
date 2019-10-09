@@ -11,13 +11,30 @@ import numpy as np
 import plotly.offline as py
 import plotly.graph_objs as go
 from config import HOST, USER, PASSWD, DB, TABLE_NAME_INDEX, ALLOWED_EXTENSIONS, DIRECTORY, \
-    TABLE_NAME_ANALYSIS_GAODE, TABLE_NAME_ANALYSIS_Commonparameters,MAP_ACCESS_TOKEN
+    TABLE_NAME_ANALYSIS_GAODE, TABLE_NAME_ANALYSIS_Commonparameters,MAP_ACCESS_TOKEN,REGION
 import matplotlib.path as mpath
 from shapely.geometry import Polygon
 import matplotlib.patches as mpatches
-
+import shapefile
 from database import Todos, db
+import math
+import csv
 
+def bdToGaoDe(lon,lat):
+    """
+    百度坐标转高德坐标
+    :param lon:
+    :param lat:
+    :return:
+    """
+    PI = 3.14159265358979324 * 3000.0 / 180.0
+    x = lon - 0.0065
+    y = lat - 0.006
+    z = math.sqrt(x * x + y * y) - 0.00002 * math.sin(y * PI)
+    theta = math.atan2(y, x) - 0.000003 * math.cos(x * PI)
+    lon = z * math.cos(theta)
+    lat = z * math.sin(theta)
+    return lon,lat
 
 
 def downloadcsvindex(city,scene):
@@ -29,22 +46,31 @@ def downloadcsvindex(city,scene):
     cur.execute(sql)
     total_res = cur.fetchall()
     fields = cur.description
-    workbook = xlwt.Workbook()
-    sheet = workbook.add_sheet('table_message', cell_overwrite_ok=True)
+    with open(r'./downlaodcsvindex.csv','w') as f :
+        write = csv.writer(f)
+        head = []
+        for field in fields:
+            head.append(field[0])
+        write.writerow(head)
+        write.writerows(total_res)
 
-
-    # 写上字段信息
-    for field in range(0, len(fields)):
-        sheet.write(0, field, fields[field][0])
-
-    # 获取并写入数据段信息
-
-    for row in range(1, len(total_res) + 1):
-        for col in range(0, len(fields)):
-            sheet.write(row, col, u'%s' % total_res[row - 1][col])
-
-    workbook.save(r'./downlaodcsvindex.xls')
     conn.close()
+    # workbook = xlwt.Workbook()
+    # sheet = workbook.add_sheet('table_message', cell_overwrite_ok=True)
+    #
+    #
+    # # 写上字段信息
+    # for field in range(0, len(fields)):
+    #     sheet.write(0, field, fields[field][0])
+    #
+    # # 获取并写入数据段信息
+    #
+    # for row in range(1, len(total_res) + 1):
+    #     for col in range(0, len(fields)):
+    #         sheet.write(row, col, u'%s' % total_res[row - 1][col])
+    #
+    # workbook.save(r'./downlaodcsvindex.csv')
+    # conn.close()
 
 def downloadcsvanalysis(city):
     conn = pymysql.connect(host=HOST, user=USER, password=PASSWD, db=DB, charset='utf8')
@@ -55,19 +81,26 @@ def downloadcsvanalysis(city):
     cur.execute(sql)
     total_res = cur.fetchall()
     fields = cur.description
-    workbook = xlwt.Workbook()
-    sheet = workbook.add_sheet('table_message', cell_overwrite_ok=True)
-    # 写上字段信息
-    for field in range(0, len(fields)):
-        sheet.write(0, field, fields[field][0])
-
-    # 获取并写入数据段信息
-
-    for row in range(1, len(total_res) + 1):
-        for col in range(0, len(fields)):
-            sheet.write(row, col, u'%s' % total_res[row - 1][col])
-
-    workbook.save(r'./downloadcsvanalysis.xls')
+    # workbook = xlwt.Workbook()
+    # sheet = workbook.add_sheet('table_message', cell_overwrite_ok=True)
+    # # 写上字段信息
+    # for field in range(0, len(fields)):
+    #     sheet.write(0, field, fields[field][0])
+    #
+    # # 获取并写入数据段信息
+    #
+    # for row in range(1, len(total_res) + 1):
+    #     for col in range(0, len(fields)):
+    #         sheet.write(row, col, u'%s' % total_res[row - 1][col])
+    #
+    # workbook.save(r'./downloadcsvanalysis.csv')
+    with open(r'./downloadcsvanalysis.csv','w') as f :
+        write = csv.writer(f)
+        head = []
+        for field in fields:
+            head.append(field[0])
+        write.writerow(head)
+        write.writerows(total_res)
     conn.close()
 
 def plotly(city,scene):
@@ -157,17 +190,25 @@ def downloadcsvanalysis_gaode(city):
     cur.execute(sql)
     total_res = cur.fetchall()
     fields = cur.description
-    workbook = xlwt.Workbook()
-    sheet = workbook.add_sheet('table_message', cell_overwrite_ok=True)
-    # 写上字段信息
-    for field in range(0, len(fields)):
-        sheet.write(0, field, fields[field][0])
-    # 获取并写入数据段信息
-    for row in range(1, len(total_res) + 1):
-        for col in range(0, len(fields)):
-            sheet.write(row, col, u'%s' % total_res[row - 1][col])
-    workbook.save(r'./downloadcsvanalysis_gaode.xls')
+    # workbook = xlwt.Workbook()
+    # sheet = workbook.add_sheet('table_message', cell_overwrite_ok=True)
+    # # 写上字段信息
+    # for field in range(0, len(fields)):
+    #     sheet.write(0, field, fields[field][0])
+    # # 获取并写入数据段信息
+    # for row in range(1, len(total_res) + 1):
+    #     for col in range(0, len(fields)):
+    #         sheet.write(row, col, u'%s' % total_res[row - 1][col])
+    # workbook.save(r'./downloadcsvanalysis_gaode.csv')
+    with open(r'./downloadcsvanalysis_gaode.csv','w') as f :
+        write = csv.writer(f)
+        head = []
+        for field in fields:
+            head.append(field[0])
+        write.writerow(head)
+        write.writerows(total_res)
     conn.close()
+
 
 
 
@@ -184,6 +225,7 @@ def allowed_file(filename):
 
 
 def upload_file(filename):
+    print(str(os.path.join(DIRECTORY, filename)))
     book = xlrd.open_workbook(str(os.path.join(DIRECTORY, filename)))
     sheet = book.sheets()[0]
     conn = pymysql.connect(host=HOST, user=USER, password=PASSWD, db=DB, charset='utf8')
@@ -191,6 +233,13 @@ def upload_file(filename):
 
     query_insert_into = """INSERT INTO {} (dt,province,city,region,cgi,tac,chinesename,covertype,scenario,vendor,earfcn,nettype,pci,iscore,gpslat,gpslng,bdlat,bdlng,angle,height,totaltilt,iscounty,isauto,flag,residential_flag,hospital_flag,beauty_spot_flag,college_flag,food_centre_flag,subway_flag,high_speed_flag,high_speed_rail_flag,viaduct_flag,high_rise_flag)
        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""".format(TABLE_NAME_ANALYSIS_Commonparameters)
+
+    w = shapefile.Writer('D:/Polygon/point')
+
+    w.autoBalance = 1
+    # w = shapefile.Writer(shapefile.POINT)
+    w.field('ANGLE', 'N')
+
     for r in range(1, sheet.nrows):
         dt = sheet.cell(r, 0).value
         province = sheet.cell(r, 1).value
@@ -211,6 +260,10 @@ def upload_file(filename):
         bdlat = float(sheet.cell(r, 16).value)
         bdlng = float(sheet.cell(r, 17).value)
         angle = int(sheet.cell(r, 18).value)
+        w.point(bdToGaoDe(bdlng,bdlat))
+        w.record(angle)
+
+
         height = sheet.cell(r, 19).value
         totaltilt = float(sheet.cell(r, 20).value)
         iscounty = bool(sheet.cell(r, 21).value)
@@ -234,7 +287,8 @@ def upload_file(filename):
 
     conn.commit()
     conn.close()
-
+    w.close()
+    print(province+'完成')
 
 #小区与场景关联
 def commonparameters(city):
@@ -353,88 +407,141 @@ def analysis_new_mission_commonparameters_tagged_100_200(city):
 def analysis_new_mission_gaodemapscene_tagged(city):
     db = pymysql.connect(host=HOST, user=USER, password=PASSWD, db=DB, charset='utf8')
     cursor = db.cursor()
-    shapes = gaodemapscene1(city, 120000)
+    _region = findRegion(city, 120000)
+    print(city)
+    print('**********')
+    print(_region)
+    for region in _region:
 
-    for s in range(0, len(shapes)):
-        gaodemapscene_id = shapes[s][0]
-        district = shapes[s][5]
-        region = district.replace('区', '').replace('县', '').replace('市', '')
+        region = region[0]
+        print(region)
+        shapes = gaodemapscene1(city, region, 120000)
+        print(len(shapes))
+        region = REGION[region]
+        print(region)
         lines = commonparameters1(city, region)
-        Path = mpath.Path
-        i = 0
-        for l in range(0, len(lines)):
+        print(len(lines))
+        for s in range(0, len(shapes)):
+            gaodemapscene_id = shapes[s][0]
             shape = shapes[s][16]
-            shape_array = np.array([float(i) for i in shape.replace('|', ',').replace(';', ',').split(',')]).reshape(-1,2)
-            angle = float(lines[l][18])
-            point = (float(lines[l][15]), float(lines[l][14]))
+            shape_array = np.array([float(i) for i in shape.replace('|', ',').replace(';', ',').split(',')]).reshape(-1,                                                                                                                     2)
+            Path = mpath.Path
             p = Path(shape_array)
-            cgi = lines[l][4]
-            chinesename = lines[l][6]
-            pci = lines[l][12]
+            i = 0
+            for l in range(0, len(lines)):
 
-            if p.contains_points([point]):
-                i += 1
-                if i == 58:
-                    print('超出范围')
-                    break
-                cursor.execute(query_gaodemapscene(cgi, chinesename, pci, gaodemapscene_id, i))
+                angle = float(lines[l][18])
 
-            else:
-                try:
-                    a = mpatches.Wedge(point, 0.0009, angle - 65, angle + 65)._path.vertices
-                    a = Polygon(a).buffer(0)
-                    b = Polygon(shape_array)
-                    c = a.intersection(b)
-                    Polygon(c)
-                    overlap = 1
-                except NotImplementedError as e:
-                    overlap = 0
-                if overlap > 0:
+                point = (float(lines[l][15]), float(lines[l][14]))
+
+
+                cgi = lines[l][4]
+
+                chinesename = lines[l][6]
+                pci = lines[l][12]
+
+                if p.contains_points([point]):
                     i += 1
                     if i == 58:
                         print('超出范围')
                         break
+
                     cursor.execute(query_gaodemapscene(cgi, chinesename, pci, gaodemapscene_id, i))
 
                 else:
                     try:
-                        a = mpatches.Wedge(point, 0.0018, angle - 65, angle + 65, width=0.0009)._path.vertices
+                        a = mpatches.Wedge(point, 0.0009, angle - 65, angle + 65)._path.vertices
                         a = Polygon(a).buffer(0)
                         b = Polygon(shape_array)
+                        if not b.is_valid:
+                            break
                         c = a.intersection(b)
-                        polygon = Polygon(c)
-                        f = polygon.area / b.area
+                        Polygon(c)
+                        overlap = 1
+                    except AssertionError as e:
+                        print(cgi,shape,gaodemapscene_id)
+                        break
+                    except ValueError as e:
+                        print(shape)
+                        break
                     except NotImplementedError as e:
-                        f = 0
-                    if f > 0.5:
+                        overlap = 0
+                    finally:
+                        cursor.close()
+
+                        db.close()
+                    if overlap > 0:
                         i += 1
                         if i == 58:
                             print('超出范围')
                             break
                         cursor.execute(query_gaodemapscene(cgi, chinesename, pci, gaodemapscene_id, i))
-        print('%.2f%%' % (s / len(shapes) * 100))
+
+                    else:
+                        try:
+                            a = mpatches.Wedge(point, 0.0018, angle - 65, angle + 65, width=0.0009)._path.vertices
+                            a = Polygon(a).buffer(0)
+                            b = Polygon(shape_array)
+
+                            c = a.intersection(b)
+                            polygon = Polygon(c)
+                            f = polygon.area / b.area
+                        except AssertionError as e:
+                            print(cgi, shape, gaodemapscene_id)
+                            break
+                        except ValueError as e:
+                            print(shape)
+                            break
+                        except NotImplementedError as e:
+                            f = 0
+                        finally:
+                            cursor.close()
+
+                            db.close()
+                        if f > 0.5:
+                            i += 1
+                            if i == 58:
+                                print('超出范围')
+                                break
+
+                            cursor.execute(query_gaodemapscene(cgi, chinesename, pci, gaodemapscene_id, i))
+
+            print('%.2f%%' % (s / len(shapes) * 100))
     cursor.close()
     db.commit()
     db.close()
 
-
-def commonparameters1(city,region):
+def findRegion(city,typecode):
+    print(city)
     db = pymysql.connect(host=HOST, user=USER, password=PASSWD, db=DB, charset='utf8')
     cursor = db.cursor()
-    sql = """
-    select * from {} where city= %s and region like %s and pci is not null and chinesename is not null""".format(TABLE_NAME_ANALYSIS_Commonparameters)
-    values = (city,region+'%')
+    sql = """SELECT district from {} where city like %s and typecode like %s GROUP BY district
+    """.format(TABLE_NAME_INDEX)
+    values = (city+'%',notzero(typecode)+'%')
     cursor.execute(sql,values)
     re_now = cursor.fetchall()
     return re_now
 
+def commonparameters1(city,region):
+    db = pymysql.connect(host=HOST, user=USER, password=PASSWD, db=DB, charset='utf8')
+    cursor = db.cursor()
+    # sql = """
+    # select * from {} where city like %s  and (region = %s )""".format(TABLE_NAME_ANALYSIS_Commonparameters)
+    sql = """
+    select * from {} where  (region = '{}' )""".format(TABLE_NAME_ANALYSIS_Commonparameters,region)
 
-def gaodemapscene1(city,typecode):
+    cursor.execute(sql)
+    re_now = cursor.fetchall()
+    return re_now
+
+
+def gaodemapscene1(city,region,typecode):
     db = pymysql.connect(host=HOST, user=USER, password=PASSWD, db=DB, charset='utf8')
     cursor = db.cursor()
     sql = """
-    select * from {} where city like %s and typecode like %s and wgs_shape is not null""".format(TABLE_NAME_INDEX)
-    values = (city+'%',notzero(typecode)+'%')
+    select * from {} where city like %s and district = %s and typecode like %s and wgs_shape is not null""".format(TABLE_NAME_INDEX)
+
+    values = (city+'%',region,notzero(typecode)+'%')
     cursor.execute(sql,values)
     re_now = cursor.fetchall()
     return re_now
@@ -446,6 +553,7 @@ def query_gaodemapscene(cgi,chinesename,pci,gaodemapscene_id,i):
     pci_k ='pci_'+str(i)
     a_list = [cgi_i,chinesename_j,pci_k,cgi,chinesename,pci,gaodemapscene_id,TABLE_NAME_ANALYSIS_GAODE]
     sql = """update {0[7]} set {0[0]}= '{0[3]}',{0[1]}= '{0[4]}',{0[2]}= {0[5]} where id= '{0[6]}'""".format(a_list)
+    print(sql)
     return sql
 
 
@@ -455,6 +563,8 @@ def notzero(input):
     output=int(b[::-1])
     return str(output)
 
+def takeSecond(elem):
+    return elem[1]
 
 class RegisterForm(FlaskForm):
     username = StringField(u'用户名', validators=[DataRequired()])
